@@ -1,0 +1,26 @@
+- name: configure my sql server
+  hosts: mysql
+  become: yes
+  tasks:
+    - name: install mysql server
+      ansible.builtin.package:
+        name: mysql-server
+        state: installed
+    - name: start mysql
+      ansible.builtin.service:
+        name: mysqld
+        state: started
+    - name: enable mysql
+      ansible.builtin.service:
+        name: mysqld
+        enabled: yes
+    - name: create database
+      ansible.builtin.mysql_db:
+        name: mydb
+        state: present
+    - name: create user
+      ansible.builtin.mysql_user:
+        name: myuser
+        password: mypassword
+        priv: mydb.*:ALL
+        state: present
